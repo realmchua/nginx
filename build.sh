@@ -44,7 +44,9 @@ while true; do
             echo "" && echo "" && echo ""
             exit
             ;;
-        *) echo Invalid Response ;;
+        *)
+            echo Invalid Response
+            ;;
         esac
     else
         echo ""
