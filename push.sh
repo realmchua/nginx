@@ -18,9 +18,9 @@ if [[ -n "$result" ]]; then
     echo "" && echo "" && echo ""
     while true; do
 
-        read -p "Do you want to proceed? (y/n) " yn
+        read -p "Do you want to proceed? (y/n) " nginx_yn
 
-        case $yn in
+        case $nginx_yn in
         [yY])
             echo Ok, we will proceed to push the docker image.
             docker tag $result realmsg/nginx:latest
@@ -33,7 +33,7 @@ if [[ -n "$result" ]]; then
             echo "" && echo "" && echo ""
             exit
             ;;
-        *) echo invalid response ;;
+        *) echo Invalid Response ;;
         esac
     done
 fi
