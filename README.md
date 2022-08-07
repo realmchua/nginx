@@ -1,4 +1,4 @@
-An NGIͥNXͯ web server builds on 𝓐𝓵𝓹𝓲𝓷𝓮 𝓛𝓲𝓷𝓾𝔁 with PHP8.1, FastCGI, Bash and OpenRC init-service.. (40.3 MB)
+An NGIͥNXͯ web server builds on 𝓐𝓵𝓹𝓲𝓷𝓮 𝓛𝓲𝓷𝓾𝔁 with PHP8.1, FastCGI, Bash and OpenRC init-service.
 
 Build and maintained by: Realm Chua < realm at mylinuxbox dot cloud>
 
