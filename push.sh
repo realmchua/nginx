@@ -10,20 +10,34 @@ echo '
 ┃┃┃╰┫┃━┫╭╮┃╰┫┃┃┃┣━━┃╭╯╰╯┃╰╯┃╰━┫╭╮┫┃━┫┃╱┃╰━╯┃╰╯┃┃╰┫╰╯┃┃━┫┃
 ╰╯╰━┻━━┻╯╰┻━┻┻┻╯╰━━╯╰━━━┻━━┻━━┻╯╰┻━━┻╯╱╰━━━┻━━┻┻━┻━━┻━━┻╯'
 
+echo "" && echo "" && echo ""
 echo "I am scanning for the Docker Image."
-result=$(cat .build)
+result=$(docker images --format "{{.Repository}}:{{.Tag}}" --filter=reference=realmsg/nginx)
 
 while true; do
     if [[ -n "$result" ]]; then
         echo "Docker Image Found."
-        echo "$(cat .build)"
+        echo "$(docker images --format "{{.Repository}}:{{.Tag}}" --filter=reference=realmsg/nginx)" >.repository
+        cat .repository
         echo "" && echo "" && echo ""
-        read -p "Do you want to proceed? (y/n) " nginx_yn
+        ImageFound=true
+    else
+        echo ""
+        ImageFound=false
+        echo "No Docker Image Found, Please Build First. Run ./build"
+        echo "" && echo "" && echo ""
+        exit
+    fi
+    if [[ "$ImageFound" == "true" ]]; then
+        echo ""
+        read -p "Do you want to proceed? (y/n) " push_yn
 
-        case $nginx_yn in
+        case $push_yn in
         [yY])
             echo "Ok, proceeding to push the image."
             TagNPushLatest=true
+            echo ""
+            docker push $(sed '1q' .repository)
             echo "" && echo "" && echo ""
             ;;
         [nN])
@@ -37,23 +51,47 @@ while true; do
         esac
     fi
     if [[ "$TagNPushLatest" == "true" ]]; then
-        read -p "Do you also want to push a copy as latest? (y/n)" PushAsLatest_yn
-
+        echo ""
+        echo "Is this consider the latest release?"
+        read -p "Do you also want to push it as the latest to the Docker hub? (y/n)" PushAsLatest_yn
+        echo "" && echo "" && echo ""
         case $PushAsLatest_yn in
 
         [yY])
-            echo "Pushing to DockerHub as $(cat .build) and realmsg/nginx:latest"
-            docker push $(cat .build)
-            docker tag $(cat .build) realmsg/nginx:latest
+            echo "Pushing to DockerHub as realmsg/nginx:latest"
+            docker tag $(sed '1q' .repository) realmsg/nginx:latest
             docker push realmsg/nginx:latest
+            TagNPushStable=true
+            echo "" && echo "" && echo ""
+            ;;
+        [nN])
+            TagNPushStable=true
+            ;;
+        *)
+            echo ""
+            echo Invalid Response
+            echo "" && echo "" && echo ""
+            ;;
+        esac
+    fi
+    if [[ "$TagNPushStable" == "true" ]]; then
+        echo ""
+        echo "Is this consider the stable release?"
+        read -p "Do you also want to push it as the stable to the Docker hub? (y/n)" PushAsStable_yn
+        echo "" && echo "" && echo ""
+        case $PushAsStable_yn in
+
+        [yY])
+            echo "Pushing to DockerHub as realmsg/nginx:stable"
+            docker tag $(sed '1q' .repository) realmsg/nginx:stable
+            docker push realmsg/nginx:stable
             echo "" && echo "" && echo ""
             break
             ;;
         [nN])
-            echo "Ok, we will only push a copy of the image as $(cat .build)"
-            docker push $(cat .build)
+            echo exiting...
             echo "" && echo "" && echo ""
-            break
+            exit
             ;;
         *)
             echo ""

@@ -15,7 +15,7 @@
 ############################################################################################################
 
 ########## System Setting
-FROM realmsg/alpine:latest
+FROM realmsg/alpine:stable
 
 VOLUME ["/sys/fs/cgroup"]
 VOLUME ["/config", "/work", "/logs"]
