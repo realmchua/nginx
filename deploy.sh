@@ -10,8 +10,8 @@ echo '
 ┃┃┃╰┫┃━┫╭╮┃╰┫┃┃┃┣━━┃╭╯╰╯┃╰╯┃╰━┫╭╮┫┃━┫┃╱┃╰━╯┃╰╯┃┃╰┫╰╯┃┃━┫┃
 ╰╯╰━┻━━┻╯╰┻━┻┻┻╯╰━━╯╰━━━┻━━┻━━┻╯╰┻━━┻╯╱╰━━━┻━━┻┻━┻━━┻━━┻╯'
 
-echo "I am checking for the image file."
-result=$(docker images -q realmsg/nginx)
+echo "I am checking for any existing docker image files."
+result=$(cat .build)
 echo "" && echo "" && echo ""
 
 while true; do
@@ -22,10 +22,12 @@ while true; do
         case $deploy_yn in
 
         [yY])
+            echo ""
             echo "Ok, we will proceed to deploy the docker image."
             echo "What shall we name the container?"
             read containerName
             ContinueDeploy=true
+            echo "" && echo "" && echo ""
             ;;
         [nN])
             echo ""
@@ -46,9 +48,11 @@ while true; do
         case $persistentStorage_yn in
 
         [yY])
+            echo ""
             echo "Please enter your persistent storage path in host/path:container/path e.g. (/home/docker/www:/www)."
             read persistentStoragePath
             PersistentStorage=true
+            echo "" && echo "" && echo ""
             ;;
         [nN])
             echo ""
@@ -70,15 +74,17 @@ while true; do
         case $changeport_yn in
 
         [yY])
+            echo ""
             echo "Please key the new port numbers, e.g. (-p 80:8080 -p 443:9443) - This binds to port 8080 of the container port 80."
             read NewContainerPort
-            docker run -itd --name $containerName $NewContainerPort -v $persistentStoragePath realmsg/nginx:latest
+            docker run -itd --name $containerName $NewContainerPort -v $persistentStoragePath $(cat .build)
+            echo "" && echo "" && echo ""
             break
             ;;
         [nN])
             echo ""
             echo "I am using the default port."
-            docker run -itd --name $containerName -v $persistentStoragePath realmsg/nginx:latest
+            docker run -itd --name $containerName -v $persistentStoragePath $(cat .build)
             echo "" && echo "" && echo ""
             break
             ;;
@@ -95,15 +101,17 @@ while true; do
         case $changeport_yn in
 
         [yY])
+            echo ""
             echo "Please key the new port numbers, e.g. (-p 80:8080 -p 443:9443) - This binds to port 8080 of the container port 80."
             read NewContainerPort
-            docker run -itd --name $containerName $NewContainerPort realmsg/nginx:latest
+            docker run -itd --name $containerName $NewContainerPort $(cat .build)
+            echo "" && echo "" && echo ""
             break
             ;;
         [nN])
             echo ""
             echo "I am using the default port."
-            docker run -itd --name $containerName realmsg/nginx:latest
+            docker run -itd --name $containerName $(cat .build)
             echo "" && echo "" && echo ""
             break
             ;;
