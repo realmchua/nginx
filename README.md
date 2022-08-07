@@ -22,7 +22,7 @@ cd nginx
 
 ./deploy (To deploy the image file) or
 
-docker -itd -p 80:80 -p 443:443 -v /home/docker/www:/www --name mywebserver realmsg/nginx:latest
+docker -itd -p 80:80 -p 443:443 -v /home/docker/www:/www --name mywebserver realmsg/nginx:stable
 
 ./push (To push the image to Docker Hub's Repository)
   
