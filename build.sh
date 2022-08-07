@@ -22,9 +22,9 @@ if [[ -n "$result" ]]; then
     echo "" && echo "" && echo ""
     while true; do
 
-        read -p "Do you want to proceed? (y/n) " yn
+        read -p "Do you want to proceed? (y/n) " nginx_yn
 
-        case $yn in
+        case $nginx_yn in
         [yY])
             echo Ok, we will proceed to build the docker image.
             echo "Please enter your email address for the Automated Certificate Management Environment (ACME)."
@@ -40,7 +40,7 @@ if [[ -n "$result" ]]; then
             echo "" && echo "" && echo ""
             exit
             ;;
-        *) echo invalid response ;;
+        *) echo Invalid Response ;;
         esac
     done
 else
